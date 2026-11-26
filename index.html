@@ -1,0 +1,365 @@
+<!--
+  CV EXPRESS — pegar completo en un bloque "HTML personalizado" de WordPress
+  (o en una página con plantilla de ancho completo).
+  1) Edita el objeto CONFIG al inicio del <script>.
+  2) No necesita plugins, base de datos ni librerías externas.
+-->
+<div id="cvx-app">
+<style>
+#cvx-app{--ink:#14202b;--mute:#5b6770;--line:#d9e0e4;--teal:#0f4c4a;--teal2:#0b3836;--sun:#f2c230;--bg:#f4f7f7;--paper:#fff;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;
+  max-width:1200px;margin:0 auto;padding:0 0 48px;box-sizing:border-box}
+#cvx-app *,#cvx-app *::before,#cvx-app *::after{box-sizing:border-box}
+#cvx-app h1,#cvx-app h2,#cvx-app h3{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;line-height:1.15;margin:0;color:var(--ink)}
+#cvx-app .cvx-hero{background:var(--teal);color:#fff;padding:44px 24px 40px}
+#cvx-app .cvx-hero h1{color:#fff;font-size:clamp(28px,5vw,46px);max-width:760px}
+#cvx-app .cvx-hero p{max-width:640px;margin:14px 0 0;font-size:18px;color:#d7ecea}
+#cvx-app .cvx-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;padding:0;list-style:none}
+#cvx-app .cvx-badges li{background:var(--teal2);border:1px solid #2a6f6c;padding:6px 12px;border-radius:999px;font-size:14px}
+#cvx-app .cvx-main{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px;padding:24px}
+@media(max-width:920px){#cvx-app .cvx-main{grid-template-columns:1fr}}
+#cvx-app .cvx-panel{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px}
+#cvx-app .cvx-panel h2{font-size:20px;margin-bottom:12px}
+#cvx-app .cvx-panel h3{font-size:16px;margin:20px 0 8px}
+#cvx-app label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px;color:var(--mute)}
+#cvx-app input,#cvx-app textarea,#cvx-app select{width:100%;font:inherit;font-size:15px;padding:9px 10px;border:1px solid #b9c4ca;border-radius:6px;background:#fff;color:var(--ink)}
+#cvx-app textarea{min-height:74px;resize:vertical}
+#cvx-app input:focus-visible,#cvx-app textarea:focus-visible,#cvx-app select:focus-visible,#cvx-app button:focus-visible,#cvx-app a:focus-visible{outline:3px solid var(--sun);outline-offset:1px}
+#cvx-app .cvx-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#cvx-app .cvx-item{border:1px dashed #b9c4ca;border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#fafcfc}
+#cvx-app button,#cvx-app .cvx-btn{font:inherit;font-weight:700;cursor:pointer;border-radius:6px;padding:10px 16px;border:2px solid var(--teal);background:var(--teal);color:#fff;text-decoration:none;display:inline-block;text-align:center}
+#cvx-app button:hover,#cvx-app .cvx-btn:hover{background:var(--teal2)}
+#cvx-app .cvx-ghost{background:#fff;color:var(--teal)}
+#cvx-app .cvx-ghost:hover{background:#e8f1f0}
+#cvx-app .cvx-sun{background:var(--sun);border-color:var(--sun);color:#2a2100}
+#cvx-app .cvx-sun:hover{background:#e0b221}
+#cvx-app .cvx-small{padding:5px 10px;font-size:13px}
+#cvx-app .cvx-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+#cvx-app .cvx-bar select{width:auto;min-width:190px}
+#cvx-app .cvx-stage{background:#e3eaec;border-radius:10px;padding:16px;overflow:auto}
+#cvx-app .cvx-paperwrap{max-width:794px;margin:0 auto;position:relative}
+#cvx-app .cvx-lock::after{content:"VISTA PREVIA";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 64px Georgia,serif;color:rgba(15,76,74,.16);transform:rotate(-28deg);pointer-events:none}
+#cvx-app .cvx-note{font-size:13px;color:var(--mute);margin:10px 0 0}
+#cvx-app .cvx-unlock{margin-top:16px;border:2px solid var(--sun);background:#fffbea;border-radius:10px;padding:16px}
+#cvx-app .cvx-unlock h3{margin:0 0 6px}
+#cvx-app .cvx-adslot{margin:0 24px;min-height:90px;border:1px dashed #b9c4ca;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:13px;text-align:center;padding:8px}
+#cvx-app .cvx-guides{padding:24px}
+#cvx-app .cvx-guides h2{font-size:26px;margin-bottom:6px}
+#cvx-app .cvx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:16px}
+#cvx-app .cvx-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px}
+#cvx-app .cvx-card h3{font-size:18px;margin-bottom:6px}
+#cvx-app .cvx-card p{margin:0 0 12px;color:var(--mute);font-size:15px}
+#cvx-app .cvx-faq{padding:0 24px}
+#cvx-app details{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin-bottom:8px}
+#cvx-app summary{cursor:pointer;font-weight:600}
+#cvx-app details p{margin:8px 0 0;color:var(--mute)}
+#cvx-app .cvx-foot{padding:24px;font-size:12px;color:var(--mute)}
+#cvx-app .cvx-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:8px;font-size:14px;z-index:99999;display:none}
+</style>
+
+<header class="cvx-hero">
+  <h1>Tu currículum listo en 5 minutos, escrito para pasar los filtros de selección</h1>
+  <p>Llena los campos, mira el resultado en vivo y descarga tu CV en PDF. Sin registro. Tus datos no salen de tu navegador.</p>
+  <ul class="cvx-badges">
+    <li>Formato compatible con ATS</li>
+    <li>Plantilla clásica gratis</li>
+    <li>Descarga en PDF</li>
+  </ul>
+</header>
+
+<div class="cvx-adslot" id="cvx-ad-top">Espacio publicitario (pega aquí tu código de AdSense o similar)</div>
+
+<main class="cvx-main">
+  <section class="cvx-panel" aria-label="Datos del currículum">
+    <h2>Tus datos</h2>
+    <div class="cvx-row">
+      <div><label for="cvx-name">Nombre completo</label><input id="cvx-name" data-k="name" autocomplete="name"></div>
+      <div><label for="cvx-title">Puesto al que aplicas</label><input id="cvx-title" data-k="title"></div>
+    </div>
+    <div class="cvx-row">
+      <div><label for="cvx-email">Correo</label><input id="cvx-email" data-k="email" type="email" autocomplete="email"></div>
+      <div><label for="cvx-phone">Teléfono</label><input id="cvx-phone" data-k="phone" type="tel" autocomplete="tel"></div>
+    </div>
+    <label for="cvx-city">Ciudad y enlace (LinkedIn, portafolio)</label>
+    <input id="cvx-city" data-k="city" placeholder="Tijuana, B.C. · linkedin.com/in/tuusuario">
+    <label for="cvx-summary">Perfil profesional (2 a 3 líneas)</label>
+    <textarea id="cvx-summary" data-k="summary"></textarea>
+
+    <h3>Experiencia</h3>
+    <div id="cvx-exp"></div>
+    <button type="button" class="cvx-ghost cvx-small" id="cvx-add-exp">+ Agregar experiencia</button>
+
+    <h3>Educación</h3>
+    <div id="cvx-edu"></div>
+    <button type="button" class="cvx-ghost cvx-small" id="cvx-add-edu">+ Agregar estudio</button>
+
+    <h3>Habilidades</h3>
+    <label for="cvx-skills">Sepáralas con comas</label>
+    <textarea id="cvx-skills" data-k="skills" placeholder="Excel, SQL, Python, atención al detalle"></textarea>
+
+    <p class="cvx-note">Se guarda automáticamente en este navegador. <button type="button" class="cvx-ghost cvx-small" id="cvx-reset">Borrar todo</button></p>
+  </section>
+
+  <section aria-label="Vista previa">
+    <div class="cvx-bar">
+      <label for="cvx-tpl" style="margin:0">Plantilla</label>
+      <select id="cvx-tpl">
+        <option value="classic">Clásica (gratis)</option>
+        <option value="modern">Moderna (premium)</option>
+        <option value="compact">Compacta (premium)</option>
+      </select>
+      <button type="button" id="cvx-pdf">Descargar PDF</button>
+      <button type="button" class="cvx-ghost" id="cvx-copy">Copiar como texto</button>
+    </div>
+    <div class="cvx-stage"><div class="cvx-paperwrap" id="cvx-paperwrap"><div id="cvx-preview"></div></div></div>
+
+    <div class="cvx-unlock" id="cvx-unlock">
+      <h3>Desbloquea las plantillas premium</h3>
+      <p class="cvx-note" style="margin:0 0 10px">Un solo pago de <span id="cvx-price"></span>. Recibes un código por correo y lo escribes aquí.</p>
+      <a class="cvx-btn cvx-sun" id="cvx-pay" target="_blank" rel="noopener noreferrer">Comprar código</a>
+      <div class="cvx-row" style="margin-top:10px">
+        <input id="cvx-code" placeholder="Tu código" aria-label="Código de desbloqueo" autocomplete="off">
+        <button type="button" id="cvx-redeem">Canjear código</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="cvx-guides">
+  <h2>Recursos para conseguir entrevista</h2>
+  <p class="cvx-note" style="margin:0">Enlaces de afiliado: si compras, el sitio recibe una comisión sin costo extra para ti.</p>
+  <div class="cvx-grid" id="cvx-aff"></div>
+</div>
+
+<div class="cvx-adslot" id="cvx-ad-bottom" style="margin-bottom:24px">Espacio publicitario inferior</div>
+
+<div class="cvx-faq">
+  <h2 style="font-size:24px;margin-bottom:12px">Preguntas frecuentes</h2>
+  <details><summary>¿Qué significa que sea compatible con ATS?</summary><p>Muchas empresas filtran currículums con software. La plantilla usa texto real, títulos de sección claros y un solo flujo de lectura, sin tablas ni imágenes que el software no pueda leer.</p></details>
+  <details><summary>¿Cómo guardo el PDF?</summary><p>Pulsa "Descargar PDF". Se abre el cuadro de impresión: elige "Guardar como PDF" como destino.</p></details>
+  <details><summary>¿Guardan mis datos?</summary><p>No. Todo se procesa en tu navegador y solo se guarda en tu propio dispositivo.</p></details>
+</div>
+
+<div class="cvx-foot">© <span id="cvx-year"></span> CV Express. Sustituye este texto por tu aviso legal y política de privacidad.</div>
+<div class="cvx-toast" id="cvx-toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ================== CONFIGURACIÓN: EDITA SOLO ESTO ================== */
+  var CONFIG = {
+    price: "$4.99 USD",
+    payLink: "https://TU-ENLACE-DE-PAGO-STRIPE-O-GUMROAD",
+    // Códigos válidos (genera uno nuevo por cada compra y envíalo al cliente)
+    unlockCodes: ["CVPRO-2026-A1", "CVPRO-2026-B2"],
+    affiliates: [
+      { title: "Curso de entrevistas", text: "Practica las preguntas más comunes antes de tu entrevista.", url: "https://TU-ENLACE-AFILIADO-1" },
+      { title: "Plataforma de cursos en línea", text: "Certificados para reforzar tu perfil profesional.", url: "https://TU-ENLACE-AFILIADO-2" },
+      { title: "Bolsa de trabajo", text: "Publica tu CV donde las empresas ya buscan.", url: "https://TU-ENLACE-AFILIADO-3" }
+    ]
+  };
+  /* ==================================================================== */
+
+  var KEY = "cvx_state_v1", UNLOCK_KEY = "cvx_unlocked_v1";
+  var $ = function (id) { return document.getElementById(id); };
+  var root = $("cvx-app");
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function toast(msg) {
+    var t = $("cvx-toast"); t.textContent = msg; t.style.display = "block";
+    clearTimeout(toast._t); toast._t = setTimeout(function () { t.style.display = "none"; }, 2600);
+  }
+
+  var blank = function () {
+    return {
+      name: "", title: "", email: "", phone: "", city: "", summary: "", skills: "",
+      exp: [{ role: "", company: "", period: "", desc: "" }],
+      edu: [{ title: "", school: "", period: "" }],
+      tpl: "classic"
+    };
+  };
+  var S = blank();
+  try { var saved = JSON.parse(load(KEY) || "null"); if (saved && typeof saved === "object") { S = Object.assign(blank(), saved); } } catch (e) {}
+  if (!Array.isArray(S.exp) || !S.exp.length) S.exp = blank().exp;
+  if (!Array.isArray(S.edu) || !S.edu.length) S.edu = blank().edu;
+  if (["classic", "modern", "compact"].indexOf(S.tpl) < 0) S.tpl = "classic";
+
+  var unlocked = load(UNLOCK_KEY) === "1";
+
+  /* ---------- CSS del currículum (compartido por vista previa y PDF) ---------- */
+  var CV_CSS =
+    ".cvx-cv{font-family:Georgia,'Times New Roman',serif;font-size:14px;line-height:1.45;color:#14202b;background:#fff;padding:38px 42px;min-height:1000px}" +
+    ".cvx-cv h1{font-size:30px;margin:0;line-height:1.1}" +
+    ".cvx-cv .t{font-size:16px;margin:4px 0 0;color:#444}" +
+    ".cvx-cv .c{font-size:13px;color:#555;margin:6px 0 0;word-break:break-word}" +
+    ".cvx-cv h2{font-size:14px;margin:20px 0 8px;padding-bottom:3px;border-bottom:1.5px solid #14202b;letter-spacing:.04em;text-transform:uppercase}" +
+    ".cvx-cv p{margin:0 0 6px;white-space:pre-wrap}" +
+    ".cvx-cv .e{margin-bottom:10px}" +
+    ".cvx-cv .eh{display:flex;justify-content:space-between;gap:12px;font-weight:700}" +
+    ".cvx-cv .eh span+span{font-weight:400;color:#555;white-space:nowrap}" +
+    ".cvx-cv .s{color:#555}" +
+    ".cvx-t-classic .hd{text-align:center}" +
+    ".cvx-t-modern{padding:0}" +
+    ".cvx-t-modern .hd{background:#0f4c4a;color:#fff;padding:32px 42px}" +
+    ".cvx-t-modern .hd .t,.cvx-t-modern .hd .c{color:#d7ecea}" +
+    ".cvx-t-modern .bd{padding:6px 42px 38px}" +
+    ".cvx-t-modern h2{border-bottom:3px solid #f2c230;color:#0f4c4a}" +
+    ".cvx-t-compact{font-family:Arial,Helvetica,sans-serif;font-size:12.5px;padding:28px 32px}" +
+    ".cvx-t-compact h1{font-size:25px}" +
+    ".cvx-t-compact h2{font-size:12px;margin-top:14px;border-bottom:1px solid #999;color:#0f4c4a}" +
+    ".cvx-t-compact .sk{display:flex;flex-wrap:wrap;gap:6px}" +
+    ".cvx-t-compact .sk span{background:#e8f1f0;padding:2px 8px;border-radius:4px}";
+
+  var style = document.createElement("style");
+  style.textContent = CV_CSS;
+  root.insertBefore(style, root.firstChild);
+
+  /* ---------- Generación del currículum ---------- */
+  function cvInner() {
+    var contact = [S.email, S.phone, S.city].filter(Boolean).map(esc).join(" · ");
+    var out = '<div class="hd"><h1>' + esc(S.name || "Tu nombre") + "</h1>" +
+      (S.title ? '<p class="t">' + esc(S.title) + "</p>" : "") +
+      (contact ? '<p class="c">' + contact + "</p>" : "") + "</div>";
+    var body = "";
+    if (S.summary) body += "<h2>Perfil</h2><p>" + esc(S.summary) + "</p>";
+    var exps = S.exp.filter(function (x) { return x.role || x.company || x.desc; });
+    if (exps.length) {
+      body += "<h2>Experiencia</h2>" + exps.map(function (x) {
+        return '<div class="e"><div class="eh"><span>' + esc(x.role) + '</span><span>' + esc(x.period) + "</span></div>" +
+          (x.company ? '<div class="s">' + esc(x.company) + "</div>" : "") +
+          (x.desc ? "<p>" + esc(x.desc) + "</p>" : "") + "</div>";
+      }).join("");
+    }
+    var edus = S.edu.filter(function (x) { return x.title || x.school; });
+    if (edus.length) {
+      body += "<h2>Educación</h2>" + edus.map(function (x) {
+        return '<div class="e"><div class="eh"><span>' + esc(x.title) + '</span><span>' + esc(x.period) + "</span></div>" +
+          (x.school ? '<div class="s">' + esc(x.school) + "</div>" : "") + "</div>";
+      }).join("");
+    }
+    var sk = S.skills.split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+    if (sk.length) {
+      body += "<h2>Habilidades</h2>" + (S.tpl === "compact"
+        ? '<div class="sk">' + sk.map(function (s) { return "<span>" + esc(s) + "</span>"; }).join("") + "</div>"
+        : "<p>" + sk.map(esc).join(" · ") + "</p>");
+    }
+    return out + (S.tpl === "modern" ? '<div class="bd">' + body + "</div>" : body);
+  }
+  function cvHTML() { return '<div class="cvx-cv cvx-t-' + S.tpl + '">' + cvInner() + "</div>"; }
+
+  function isLocked() { return S.tpl !== "classic" && !unlocked; }
+
+  function renderPreview() {
+    $("cvx-preview").innerHTML = cvHTML();
+    $("cvx-paperwrap").className = "cvx-paperwrap" + (isLocked() ? " cvx-lock" : "");
+    $("cvx-unlock").style.display = unlocked ? "none" : "block";
+  }
+
+  /* ---------- Listas dinámicas ---------- */
+  function listHTML(arr, fields, kind) {
+    return arr.map(function (item, i) {
+      var inner = fields.map(function (f) {
+        var id = "cvx-" + kind + "-" + i + "-" + f.k;
+        var ctl = f.area
+          ? '<textarea id="' + id + '" data-kind="' + kind + '" data-i="' + i + '" data-f="' + f.k + '">' + esc(item[f.k]) + "</textarea>"
+          : '<input id="' + id + '" data-kind="' + kind + '" data-i="' + i + '" data-f="' + f.k + '" value="' + esc(item[f.k]) + '">';
+        return '<div><label for="' + id + '">' + f.l + "</label>" + ctl + "</div>";
+      });
+      var rows = "";
+      for (var j = 0; j < inner.length; j++) {
+        if (fields[j].area) rows += inner[j];
+        else if (fields[j + 1] && !fields[j + 1].area) { rows += '<div class="cvx-row">' + inner[j] + inner[j + 1] + "</div>"; j++; }
+        else rows += inner[j];
+      }
+      return '<div class="cvx-item">' + rows +
+        '<button type="button" class="cvx-ghost cvx-small" data-del="' + kind + '" data-i="' + i + '" style="margin-top:8px">Quitar</button></div>';
+    }).join("");
+  }
+  var EXP_F = [{ k: "role", l: "Puesto" }, { k: "company", l: "Empresa" }, { k: "period", l: "Periodo (2021 - Actual)" }, { k: "desc", l: "Logros y funciones", area: true }];
+  var EDU_F = [{ k: "title", l: "Carrera o curso" }, { k: "school", l: "Institución" }, { k: "period", l: "Periodo" }];
+
+  function renderLists() {
+    $("cvx-exp").innerHTML = listHTML(S.exp, EXP_F, "exp");
+    $("cvx-edu").innerHTML = listHTML(S.edu, EDU_F, "edu");
+  }
+  function persist() { store(KEY, JSON.stringify(S)); }
+
+  /* ---------- Eventos ---------- */
+  root.addEventListener("input", function (e) {
+    var t = e.target;
+    if (t.dataset.k) { S[t.dataset.k] = t.value; }
+    else if (t.dataset.kind) { S[t.dataset.kind][+t.dataset.i][t.dataset.f] = t.value; }
+    else return;
+    persist(); renderPreview();
+  });
+  root.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-del]") : null;
+    if (!b) return;
+    var kind = b.dataset.del, i = +b.dataset.i;
+    S[kind].splice(i, 1);
+    if (!S[kind].length) S[kind] = blank()[kind];
+    persist(); renderLists(); renderPreview();
+  });
+  $("cvx-add-exp").addEventListener("click", function () { S.exp.push({ role: "", company: "", period: "", desc: "" }); persist(); renderLists(); });
+  $("cvx-add-edu").addEventListener("click", function () { S.edu.push({ title: "", school: "", period: "" }); persist(); renderLists(); });
+  $("cvx-reset").addEventListener("click", function () {
+    if (!window.confirm("¿Borrar todos los datos del currículum?")) return;
+    var t = S.tpl; S = blank(); S.tpl = t; persist(); fillStatic(); renderLists(); renderPreview();
+  });
+  $("cvx-tpl").addEventListener("change", function (e) { S.tpl = e.target.value; persist(); renderPreview(); });
+
+  $("cvx-pdf").addEventListener("click", function () {
+    if (isLocked()) { toast("Esta plantilla es premium. Canjea tu código o usa la clásica."); $("cvx-unlock").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+    var w = window.open("", "_blank");
+    if (!w) { toast("Tu navegador bloqueó la ventana. Permite ventanas emergentes e intenta de nuevo."); return; }
+    w.document.open();
+    w.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>' + esc(S.name || "Curriculum") +
+      '</title><style>@page{size:A4;margin:0}body{margin:0}' + CV_CSS + '.cvx-cv{min-height:auto}</style></head><body>' + cvHTML() + "</body></html>");
+    w.document.close();
+    w.focus();
+    setTimeout(function () { try { w.print(); } catch (err) {} }, 350);
+  });
+
+  $("cvx-copy").addEventListener("click", function () {
+    if (isLocked()) { toast("Canjea tu código para usar esta plantilla."); return; }
+    var lines = [S.name, S.title, [S.email, S.phone, S.city].filter(Boolean).join(" | "), "", S.summary ? "PERFIL\n" + S.summary : ""];
+    S.exp.forEach(function (x, i) { if (i === 0) lines.push("", "EXPERIENCIA"); if (x.role || x.company) lines.push(x.role + " - " + x.company + " (" + x.period + ")", x.desc, ""); });
+    S.edu.forEach(function (x, i) { if (i === 0) lines.push("EDUCACIÓN"); if (x.title || x.school) lines.push(x.title + " - " + x.school + " (" + x.period + ")"); });
+    if (S.skills) lines.push("", "HABILIDADES", S.skills);
+    var txt = lines.filter(function (l) { return l !== undefined; }).join("\n");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { toast("Texto copiado"); }, function () { toast("No se pudo copiar"); });
+    } else { toast("Tu navegador no permite copiar automáticamente"); }
+  });
+
+  $("cvx-redeem").addEventListener("click", function () {
+    var v = $("cvx-code").value.trim();
+    if (CONFIG.unlockCodes.indexOf(v) >= 0) {
+      unlocked = true; store(UNLOCK_KEY, "1"); renderPreview(); toast("Plantillas premium desbloqueadas");
+    } else { toast("Código no válido. Revisa que esté completo."); }
+  });
+
+  /* ---------- Inicialización ---------- */
+  function fillStatic() {
+    root.querySelectorAll("[data-k]").forEach(function (el) { el.value = S[el.dataset.k] || ""; });
+    $("cvx-tpl").value = S.tpl;
+  }
+  $("cvx-price").textContent = CONFIG.price;
+  $("cvx-pay").href = CONFIG.payLink;
+  $("cvx-year").textContent = new Date().getFullYear();
+  $("cvx-aff").innerHTML = CONFIG.affiliates.map(function (a) {
+    return '<div class="cvx-card"><h3>' + esc(a.title) + "</h3><p>" + esc(a.text) +
+      '</p><a class="cvx-btn cvx-ghost cvx-small" href="' + esc(a.url) + '" target="_blank" rel="sponsored noopener noreferrer">Ver recurso</a></div>';
+  }).join("");
+
+  fillStatic(); renderLists(); renderPreview();
+})();
+</script>
+</div>
